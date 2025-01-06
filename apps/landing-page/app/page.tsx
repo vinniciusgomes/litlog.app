@@ -1,12 +1,10 @@
-import { Button } from "@workspace/ui/components/button"
+import { Hero } from "@/components/hero";
+import { Button } from "@workspace/ui/components/button";
 
 export default function Page() {
   return (
-    <div className="flex items-center justify-center min-h-svh">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Landing Page</h1>
-        <Button size="sm">Button</Button>
-      </div>
-    </div>
-  )
+    <main className="pt-3 sm:pt-5 md:pt-8 lg:pt-10 xl:pt-15 p-2 sm:px-6 lg:px-8 xl:px-14">
+      <Hero />
+    </main>
+  );
 }
