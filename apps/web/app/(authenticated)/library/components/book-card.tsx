@@ -31,8 +31,8 @@ export function BookCard({ book, viewMode }: BookCardProps) {
             />
           </div>
           <div className="ml-4 flex-grow">
-            <h3 className="font-semibold">{book.title}</h3>
-            <p className="text-sm text-muted-foreground">{book.author}</p>
+            <h3 className="font-semibold heading text-gray-700">{book.title}</h3>
+            <p className="text-sm text-muted-foreground italic">{book.author}</p>
           </div>
           <Badge variant={book.status === "reading" ? "secondary" : "default"}>
             <Check className="mr-1 h-3 w-3" />
@@ -64,9 +64,9 @@ export function BookCard({ book, viewMode }: BookCardProps) {
             </Badge>
           </div>
         </div>
-        <div className="p-3">
-          <h3 className="line-clamp-1 font-semibold">{book.title}</h3>
-          <p className="line-clamp-1 text-sm text-muted-foreground">
+        <div className="p-3 border-t">
+          <h3 className="line-clamp-1 font-semibold heading text-lg text-gray-700">{book.title}</h3>
+          <p className="line-clamp-1 text-sm text-muted-foreground italic">
             {book.author}
           </p>
         </div>

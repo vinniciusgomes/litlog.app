@@ -1,7 +1,7 @@
 "use client";
 
 import { Grid, List, Search } from "lucide-react";
-import { LibraryNav } from "./components/library-nav";
+import { LibraryNav } from "@/components/library-nav";
 import { LibrarySidebar } from "./components/library-sidebar";
 import {
   Tabs,
@@ -14,7 +14,10 @@ import { Button } from "@workspace/ui/components/button";
 import { BookCard } from "./components/book-card";
 import { useState } from "react";
 import { Sheet, SheetContent } from "@workspace/ui/components/sheet";
-import { ToggleGroup, ToggleGroupItem } from "@workspace/ui/components/toggle-group";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@workspace/ui/components/toggle-group";
 
 const books = [
   {
@@ -57,9 +60,12 @@ export default function LibraryPage() {
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <div className="relative">
                   <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input placeholder="Search in library..." className="pl-8" />
+                  <Input
+                    placeholder="Search in library..."
+                    className="pl-8 h-12"
+                  />
                 </div>
-                <Button className="sm:w-auto">Add book</Button>
+                <Button className="sm:w-auto h-12">Add book</Button>
               </div>
             </div>
             <TabsContent value="books" className="space-y-4">
