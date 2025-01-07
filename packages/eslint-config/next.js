@@ -30,6 +30,7 @@ export const nextJsConfig = [
   {
     plugins: {
       "@next/next": pluginNext,
+      "simple-import-sort": "eslint-plugin-simple-import-sort",
     },
     rules: {
       ...pluginNext.configs.recommended.rules,
@@ -46,6 +47,7 @@ export const nextJsConfig = [
       // React scope no longer necessary with new JSX transform.
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
+      "simple-import-sort/imports": "error"
     },
   },
 ]

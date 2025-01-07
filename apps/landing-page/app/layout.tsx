@@ -1,9 +1,9 @@
 import { Libre_Baskerville, Inter } from "next/font/google";
 
 import "@workspace/ui/globals.css";
-import "../styles/global.css";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/header";
+import "@/styles/animations.css";
 
 const libreBaskerville = Libre_Baskerville({
   weight: ["400", "700"],
@@ -28,7 +28,7 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          
+
           {children}
         </Providers>
       </body>

@@ -1,11 +1,3 @@
-:root {
-  --font-libre-baskerville: "Libre Baskerville", serif;
-}
-
-.heading {
-  font-family: var(--font-libre-baskerville);
-}
-
 @keyframes float {
   0%, 100% {
     transform: translateY(0);

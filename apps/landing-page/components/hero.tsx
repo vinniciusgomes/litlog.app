@@ -48,7 +48,7 @@ export function Hero() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center text-center">
           <h1 className="heading text-3xl font-bold leading-relaxed text-gray-800 sm:text-4xl md:text-5xl lg:text-6xl/none max-w-3xl">
-            Take <span className="text-[#F5A623]">control</span> of your
+            Take <span className="text-[#278458]">control</span> of your
             personal library
           </h1>
           <p className="mx-auto max-w-[560px] text-gray-900 mt-8">
@@ -63,7 +63,7 @@ export function Hero() {
                 placeholder="Enter your email"
                 className="max-w-80 flex-1 px-4 py-[14px] h-14"
               />
-              <Button className="bg-[#F5A623] hover:bg-[#E59613] h-14 text-white">
+              <Button className="bg-[#278458] hover:bg-[#389e6e] h-14 text-white w-full">
                 Get Early Access
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

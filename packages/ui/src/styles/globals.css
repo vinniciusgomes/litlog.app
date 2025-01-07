@@ -82,3 +82,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  --font-libre-baskerville: "Libre Baskerville", serif;
+}
+
+.heading {
+  font-family: var(--font-libre-baskerville);
+}
