@@ -11,7 +11,7 @@ export function Header() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="relative border-b border-border">
+    <header className="border-b border-border sticky top-0 z-50 bg-background">
       <div className="flex items-center justify-between h-20">
         <div className="flex-shrink-0 px-4 sm:px-10">
           <p className="text-2xl heading">Shelfie</p>
@@ -29,7 +29,7 @@ export function Header() {
           >
             Sign in
           </Button>
-          <Button className="h-20 px-10">
+          <Button className="h-20 px-10" variant="brand">
             Join <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>

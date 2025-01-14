@@ -10,6 +10,13 @@ const nextConfig = {
         pathname: '**',
         search: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'tse3.mm.bing.net',
+        port: '',
+        pathname: '**',
+        search: '',
+      },
     ],
   },
 }

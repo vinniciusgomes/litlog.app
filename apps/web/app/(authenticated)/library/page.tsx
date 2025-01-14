@@ -17,6 +17,7 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@workspace/ui/components/toggle-group";
+import { motion, AnimatePresence } from "framer-motion";
 
 const books = [
   {
@@ -27,21 +28,21 @@ const books = [
     status: "finished",
   },
   {
-    id: 1,
+    id: 2,
     title: "O peso da glória",
     author: "C. S. Lewis",
     cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
     status: "finished",
   },
   {
-    id: 1,
+    id: 3,
     title: "O peso da glória",
     author: "C. S. Lewis",
     cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
     status: "finished",
   },
   {
-    id: 1,
+    id: 4,
     title: "O peso da glória",
     author: "C. S. Lewis",
     cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
@@ -67,7 +68,12 @@ export default function LibraryPage() {
         </SheetContent>
       </Sheet>
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-6">
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-y-auto p-4 md:p-6"
+      >
         <Tabs defaultValue="books">
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <TabsList className="w-full sm:w-auto">
@@ -101,20 +107,31 @@ export default function LibraryPage() {
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
-            <div
+            <motion.div
+              layout
               className={
                 viewMode === "grid"
-                  ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+                  ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7"
                   : "space-y-4"
               }
             >
-              {books.map((book, index) => (
-                <BookCard key={book.id} index={index} book={book} viewMode={viewMode} />
-              ))}
-            </div>
+              <AnimatePresence>
+                {books.map((book, index) => (
+                  <motion.div
+                    key={book.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <BookCard index={index} book={book} viewMode={viewMode} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           </TabsContent>
         </Tabs>
-      </main>
+      </motion.main>
     </div>
   );
 }

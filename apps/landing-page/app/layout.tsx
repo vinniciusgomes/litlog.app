@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${libreBaskerville.variable} ${inter.variable} font-sans antialiased bg-white`}
+        className={`${libreBaskerville.variable} ${inter.variable} font-sans antialiased bg-white relative`}
       >
         <Providers>
           <Header />

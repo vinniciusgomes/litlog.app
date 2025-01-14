@@ -1,15 +1,14 @@
 import Link from "next/link";
 
 import { Button } from "@workspace/ui/components/button";
-import { Icons } from "@workspace/ui/components/icons";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 
-export default function SignUp() {
+export default function ForgotPassword() {
   return (
     <main className="h-screen flex items-center justify-center">
       <div className="max-w-[380px] w-full mx-auto">
-        <h1 className="text-2xl heading text-gray-700">Sign up</h1>
+        <h1 className="text-2xl heading text-gray-700">Forgot password</h1>
 
         <form action="">
           <div className="flex flex-col">
@@ -25,37 +24,14 @@ export default function SignUp() {
               className="flex-1 px-4 py-[14px] h-14"
             />
           </div>
-          <div className="flex flex-col">
-            <Label
-              htmlFor="password"
-              className="py-5 text-sm text-zinc-500 font-light"
-            >
-              Password
-            </Label>
-            <Input
-              type="password"
-              placeholder="Password"
-              className="flex-1 px-4 py-[14px] h-14"
-            />
-          </div>
 
           <Button className="h-12 w-full mt-5" variant="brand">
-            Sign up
-          </Button>
-
-          <div className="my-5 flex justify-between gap-4 items-center">
-            <div className="h-px w-full bg-zinc-200" />
-            <span className="text-sm text-zinc-500 font-light">or</span>
-            <div className="h-px w-full bg-zinc-200" />
-          </div>
-
-          <Button className="h-12 w-full" variant="outline">
-            <Icons.apple /> Sign up with Apple
+            Send Reset Link
           </Button>
 
           <div className="mt-5 flex items-center justify-center">
-            <span className="text-sm text-zinc-500 ">
-              Already have an account?{" "}
+            <span className="text-sm text-zinc-500">
+              Remember your password?{" "}
               <Link href="/signin" className="underline">
                 Sign in
               </Link>

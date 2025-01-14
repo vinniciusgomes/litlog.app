@@ -48,7 +48,7 @@ export default function SignIn() {
             </Link>
           </div>
 
-          <Button className="bg-[#278458] hover:bg-[#389e6e] h-12 text-white w-full">
+          <Button className="h-12 w-full" variant="brand">
             Sign in
           </Button>
 
