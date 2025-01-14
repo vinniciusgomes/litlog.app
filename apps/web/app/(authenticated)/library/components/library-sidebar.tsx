@@ -12,7 +12,7 @@ const shelves = [
 
 export function LibrarySidebar() {
   return (
-    <div className="h-full w-64 border-r">
+    <div className="h-full w-64 border-r" >
       <ScrollArea className="h-full py-4">
         <div className="space-y-4 px-4">
           <div className="space-y-1">

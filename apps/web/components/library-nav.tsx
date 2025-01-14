@@ -11,20 +11,20 @@ import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 
 interface LibraryNavProps {
-  onMenuClick: () => void;
+  // onMenuClick: () => void;
 }
 
-export function LibraryNav({ onMenuClick }: LibraryNavProps) {
+export function LibraryNav({}: LibraryNavProps) {
   return (
-    <header className="flex h-20 items-center gap-4 border-b px-4 md:px-6">
-      <Button
+    <header className="flex h-20 items-center gap-4 border-b px-4 md:px-6 sticky top-0 bg-white z-50">
+      {/* <Button
         variant="ghost"
         size="icon"
         className="md:hidden"
         onClick={onMenuClick}
       >
         <Menu className="h-5 w-5" />
-      </Button>
+      </Button> */}
       <div className="h-full border-r flex justify-center items-center pr-6">
         <Link href="/" className="font-semibold heading text-2xl">
           Shelfie
@@ -41,10 +41,16 @@ export function LibraryNav({ onMenuClick }: LibraryNavProps) {
         <Button variant="text" className="text-gray-900">
           Library
         </Button>
-        <Button variant="text" className="text-gray-400 hover:text-gray-900 transition-colors">
+        <Button
+          variant="text"
+          className="text-gray-400 hover:text-gray-900 transition-colors"
+        >
           Clubs
         </Button>
-        <Button variant="text" className="text-gray-400 hover:text-gray-900 transition-colors">
+        <Button
+          variant="text"
+          className="text-gray-400 hover:text-gray-900 transition-colors"
+        >
           Explore
         </Button>
       </nav>

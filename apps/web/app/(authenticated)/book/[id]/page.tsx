@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Share, Star, Highlighter, ChevronDown } from "lucide-react";
-import { LibraryNav } from "@/components/library-nav";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -13,7 +12,6 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 import { Separator } from "@workspace/ui/components/separator";
 
-// Sample data
 const book = {
   id: 1,
   title: "Clean Code",
@@ -36,12 +34,11 @@ const book = {
 export default function BookPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <LibraryNav onMenuClick={() => {}} />
       <main className="flex-1 px-4 py-6 md:py-16 md:px-6">
         <div className="mx-auto max-w-5xl">
           <div className="grid gap-8 md:grid-cols-[300px_1fr]">
             {/* Book Cover */}
-            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border bg-muted md:max-w-[300px]">
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border bg-muted md:max-w-[300px] z-0">
               <Image
                 src={book.cover}
                 alt={book.title}
