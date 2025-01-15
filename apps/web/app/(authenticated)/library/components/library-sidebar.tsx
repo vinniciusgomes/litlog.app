@@ -1,6 +1,8 @@
 import { Button } from "@workspace/ui/components/button";
+import { Dialog, DialogTrigger } from "@workspace/ui/components/dialog";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { BookMarked, ChevronDown, Download, List, Plus } from "lucide-react";
+import { CreateShelfDialog } from "./create-shelf";
 
 const shelves = [
   { name: "All books", icon: List, count: 2 },
@@ -12,36 +14,42 @@ const shelves = [
 
 export function LibrarySidebar() {
   return (
-    <div className="h-full w-64 border-r" >
-      <ScrollArea className="h-full py-4">
-        <div className="space-y-4 px-4">
-          <div className="space-y-1">
-            {shelves.map((shelf) => (
-              <Button
-                key={shelf.name}
-                variant="ghost"
-                className="w-full justify-between"
-              >
-                <div className="flex items-center gap-2">
-                  <shelf.icon className="h-4 w-4" />
-                  <span>{shelf.name}</span>
-                </div>
-                <span className="text-muted-foreground">{shelf.count}</span>
+    <Dialog>
+      <div className="h-full w-64 border-r">
+        <ScrollArea className="h-full py-4">
+          <div className="space-y-4 px-4">
+            <div className="space-y-1">
+              {shelves.map((shelf) => (
+                <Button
+                  key={shelf.name}
+                  variant="ghost"
+                  className="w-full justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <shelf.icon className="h-4 w-4" />
+                    <span>{shelf.name}</span>
+                  </div>
+                  <span className="text-muted-foreground">{shelf.count}</span>
+                </Button>
+              ))}
+            </div>
+            <DialogTrigger asChild>
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <Plus className="h-4 w-4" />
+                Create shelf
               </Button>
-            ))}
+            </DialogTrigger>
+            <div className="pt-4">
+              <Button variant="outline" className="w-full justify-start gap-2">
+                <Download className="h-4 w-4" />
+                Import your library
+              </Button>
+            </div>
           </div>
-          <Button variant="ghost" className="w-full justify-start gap-2">
-            <Plus className="h-4 w-4" />
-            Create shelf
-          </Button>
-          <div className="pt-4">
-            <Button variant="outline" className="w-full justify-start gap-2">
-              <Download className="h-4 w-4" />
-              Import your library
-            </Button>
-          </div>
-        </div>
-      </ScrollArea>
-    </div>
+        </ScrollArea>
+      </div>
+
+      <CreateShelfDialog />
+    </Dialog>
   );
 }

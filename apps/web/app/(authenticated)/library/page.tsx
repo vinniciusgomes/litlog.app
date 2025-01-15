@@ -18,6 +18,7 @@ import {
   ToggleGroupItem,
 } from "@workspace/ui/components/toggle-group";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const books = [
   {
@@ -89,7 +90,9 @@ export default function LibraryPage() {
                   className="pl-8 h-12 md:w-80"
                 />
               </div>
-              <Button className="sm:w-auto h-12">Add book</Button>
+              <Link href="/book/create">
+                <Button className="sm:w-auto h-12">Add book</Button>
+              </Link>
             </div>
           </div>
           <TabsContent value="books" className="space-y-4">

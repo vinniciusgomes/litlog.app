@@ -33,10 +33,6 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
     },
   };
 
-  const imageVariants = {
-    hover: { scale: 1.05 },
-  };
-
   // List View
   if (viewMode === "list") {
     return (
@@ -55,11 +51,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
             )}
           >
             <CardContent className="flex items-center p-4">
-              <motion.div
-                className="relative h-16 w-12 flex-shrink-0"
-                variants={imageVariants}
-                whileHover="hover"
-              >
+              <motion.div className="relative h-16 w-12 flex-shrink-0">
                 <Image
                   src={book.cover}
                   alt={book.title}
@@ -111,16 +103,12 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
       >
-        <Card className="overflow-hidden rounded-none">
+        <Card className="overflow-hidden rounded-none border-none">
           <CardContent className="p-0">
-            <motion.div
-              className="relative aspect-[3/4] w-full"
-              variants={imageVariants}
-              whileHover="hover"
-            >
+            <motion.div className="relative aspect-[3/4] w-full">
               <Image
                 src={book.cover}
                 alt={book.title}
@@ -144,7 +132,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
               </motion.div>
             </motion.div>
             <motion.div
-              className="p-3 border-t"
+              className="py-3 px-0"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
