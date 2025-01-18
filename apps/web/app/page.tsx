@@ -6,9 +6,9 @@ import { useEffect } from "react";
 export default function Page() {
   const router = useRouter();
 
-  useEffect(() => {
-    router.push("/library");
-  }, []);
+  // useEffect(() => {
+  //   router.push("/library");
+  // }, []);
 
   return <></>;
 }
