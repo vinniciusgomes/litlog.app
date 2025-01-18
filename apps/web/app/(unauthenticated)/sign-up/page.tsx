@@ -20,6 +20,7 @@ import {
 } from "@workspace/ui/components/input-otp";
 import { LoaderCircle } from "lucide-react";
 import type { clerkErrorType } from "@/lib/clerk";
+import { createFirstShelf } from "@/actions/shelf/create-first-shelf";
 
 const signUpSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -86,7 +87,17 @@ export default function SignUp() {
 
       if (completeSignUp.status === "complete") {
         await setActive({ session: completeSignUp.createdSessionId });
-        router.push("/library");
+
+        const user = await completeSignUp.createdUserId;
+        if (user) {
+          const result = await createFirstShelf(user);
+
+          if (result.error) {
+            console.error(result.error);
+          }
+        }
+
+        router.push("/registration-successful");
       }
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));

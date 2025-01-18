@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { motion } from "framer-motion";
 
 import { Button } from "@workspace/ui/components/button";
@@ -52,15 +51,6 @@ export default function RegistrationSuccessful() {
           >
             Go to the library
           </Button>
-
-          <div className="text-center">
-            <Link
-              href="/signin"
-              className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors"
-            >
-              Back to Sign In
-            </Link>
-          </div>
         </motion.div>
       </motion.div>
     </main>

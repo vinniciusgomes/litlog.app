@@ -13,6 +13,7 @@
     "@clerk/localizations": "^3.9.11",
     "@clerk/nextjs": "^6.9.14",
     "@hookform/resolvers": "^3.9.1",
+    "@prisma/client": "6.2.1",
     "@workspace/ui": "workspace:*",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.16.0",
@@ -31,6 +32,7 @@
     "@workspace/eslint-config": "workspace:^",
     "@workspace/typescript-config": "workspace:*",
     "postcss": "^8",
+    "prisma": "6.2.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
