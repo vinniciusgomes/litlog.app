@@ -1,30 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Bell,
-  Menu,
-  MessageSquare,
-  MoreVertical,
-  Search,
-  User,
-  Settings,
-  LogOut,
-  UserCircle,
-  Target,
-  UserPlus,
-  MessageCircle,
-  BookOpen,
-  Diamond,
-} from "lucide-react";
+import { Bell, MessageSquare, MoreVertical, Search, User } from "lucide-react";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 import { STRINGS } from "@/constants/strings";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
 import {

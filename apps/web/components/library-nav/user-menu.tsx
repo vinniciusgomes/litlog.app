@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/nextjs";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -7,15 +8,14 @@ import {
   UserCircle,
   Target,
   Settings,
-  UserPlus,
   MessageCircle,
-  BookOpen,
-  Diamond,
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
 
 export const UserMenu = () => {
+  const { signOut } = useAuth();
+
   return (
     <DropdownMenuContent align="end" className="w-56">
       <Link href="/settings">
@@ -42,7 +42,7 @@ export const UserMenu = () => {
         <span>Feedback</span>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>
+      <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-destructive">
         <LogOut className="mr-2 h-4 w-4" />
         <span>Log out</span>
       </DropdownMenuItem>

@@ -12,6 +12,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { toast } from "@workspace/ui/components/sonner";
+import { LoaderCircle } from "lucide-react";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -23,13 +25,13 @@ type SignInFormData = z.infer<typeof signInSchema>;
 export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const [error, setError] = useState<null | string>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    formState: { errors: formErrors },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
@@ -40,6 +42,7 @@ export default function SignIn() {
     }
 
     try {
+      setLoading(true);
       const result = await signIn.create({
         identifier: data.email,
         password: data.password,
@@ -54,6 +57,11 @@ export default function SignIn() {
     } catch (err: any) {
       console.error("error", err.errors[0].message);
       setError(err.errors[0].message);
+      toast.error("Error to authenticate", {
+        description: err.errors[0].message,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,6 +86,7 @@ export default function SignIn() {
               type="email"
               placeholder="Email address"
               className="flex-1 px-4 py-[14px] h-14"
+              error={formErrors.email?.message}
               {...register("email")}
             />
           </div>
@@ -92,6 +101,7 @@ export default function SignIn() {
               type="password"
               placeholder="Password"
               className="flex-1 px-4 py-[14px] h-14"
+              error={formErrors.password?.message}
               {...register("password")}
             />
           </div>
@@ -105,8 +115,14 @@ export default function SignIn() {
             </Link>
           </div>
 
-          <Button className="h-12 w-full" variant="brand" type="submit">
+          <Button
+            className="h-12 w-full"
+            variant="brand"
+            type="submit"
+            disabled={loading}
+          >
             Sign in
+            {loading && <LoaderCircle className="h-4 w-4 animate-spin" />}
           </Button>
 
           <div className="my-5 flex justify-between gap-4 items-center">
@@ -115,7 +131,12 @@ export default function SignIn() {
             <div className="h-px w-full bg-zinc-200" />
           </div>
 
-          <Button className="h-12 w-full" variant="outline" type="button">
+          <Button
+            className="h-12 w-full"
+            variant="outline"
+            type="button"
+            disabled={loading}
+          >
             <Icons.apple /> Sign in with Apple
           </Button>
 
