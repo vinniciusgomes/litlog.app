@@ -21,8 +21,8 @@ import {
 } from "@workspace/ui/components/input-otp";
 import { LoaderCircle } from "lucide-react";
 import type { clerkErrorType } from "@/lib/clerk";
-import { createFirstShelf } from "@/actions/shelf/create-first-shelf";
 import { formatUsername } from "@/utils/username";
+import { createLibrary } from "@/actions/library/create-library";
 
 const signUpSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -121,16 +121,9 @@ export default function SignUp() {
       if (completeSignUp.status === "complete") {
         await setActive({ session: completeSignUp.createdSessionId });
 
-        const user = await completeSignUp.createdUserId;
-        if (user) {
-          const result = await createFirstShelf(user);
+        await createLibrary(completeSignUp.createdUserId as string);
 
-          if (result.error) {
-            console.error(result.error);
-          }
-        }
-
-        router.push("/registration-successful");
+        return router.push("/registration-successful");
       }
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));

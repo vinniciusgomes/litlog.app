@@ -8,13 +8,156 @@ datasource db {
 }
 
 model Shelf {
-  id          String   @id @default(uuid())
-  name        String   @default("")
+  id          String      @id @default(uuid())
+  name        String      @default("")
   description String?
-  userId      String   @map("user_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String      @map("user_id")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  shelfBooks  ShelfBook[]
 
   @@index([userId])
   @@map("shelf")
+}
+
+model Book {
+  id             String        @id @default(uuid())
+  slug           String        @unique
+  title          String
+  subtitle       String?
+  description    String
+  isbn10         String        @unique
+  isbn13         String        @unique
+  language       String
+  pageCount      Int
+  publishedDate  DateTime
+  publisher      String
+  physicalFormat String
+  cover          String
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  authors        Author[]      @relation("book_authors")
+  libraryBooks   LibraryBook[]
+  loans          Loan[]
+  shelfBooks     ShelfBook[]
+  goalBooks      GoalBook[]
+
+  @@index([title])
+  @@index([publishedDate])
+  @@index([language])
+  @@map("book")
+}
+
+model ShelfBook {
+  id        String   @id @default(uuid())
+  shelfId   String   @map("shelf_id")
+  bookId    String   @map("book_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  shelf Shelf @relation(fields: [shelfId], references: [id])
+  book  Book  @relation(fields: [bookId], references: [id])
+
+  @@unique([shelfId, bookId])
+  @@map("shelf_book")
+}
+
+model Author {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  books     Book[]   @relation("book_authors")
+
+  @@index([name])
+  @@map("author")
+}
+
+model Library {
+  id        String        @id @default(uuid())
+  userId    String        @unique @map("user_id")
+  books     LibraryBook[]
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("library")
+}
+
+model LibraryBook {
+  id        String     @id @default(uuid())
+  libraryId String     @map("library_id")
+  bookId    String     @map("book_id")
+  status    BookStatus
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  library Library @relation(fields: [libraryId], references: [id])
+  book    Book    @relation(fields: [bookId], references: [id])
+  loan    Loan[]
+
+  @@unique([libraryId, bookId])
+  @@map("library_book")
+}
+
+model Loan {
+  id            String     @id @default(uuid())
+  libraryBookId String     @map("library_book_id")
+  borrower      String
+  loanDate      DateTime   @default(now()) @map("loan_date")
+  dueDate       DateTime   @map("due_date")
+  returnDate    DateTime?  @map("return_date")
+  status        LoanStatus @default(PENDING)
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  libraryBook LibraryBook @relation(fields: [libraryBookId], references: [id])
+  Book        Book?       @relation(fields: [bookId], references: [id])
+  bookId      String?
+
+  @@index([borrower])
+  @@map("loan")
+}
+
+model Goal {
+  id        String     @id @default(uuid())
+  userId    String     @map("user_id")
+  name      String
+  startDate DateTime   @map("start_date")
+  endDate   DateTime   @map("end_date")
+  bookCount Int        @map("book_count")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  books     GoalBook[]
+
+  @@index([userId])
+  @@map("goal")
+}
+
+model GoalBook {
+  id        String   @id @default(uuid())
+  goalId    String   @map("goal_id")
+  bookId    String   @map("book_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  goal Goal @relation(fields: [goalId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+
+  @@unique([goalId, bookId])
+  @@map("goal_book")
+}
+
+enum BookStatus {
+  WANT_TO_READ
+  READING
+  DID_NOT_FINISH
+  FINISHED
+}
+
+enum LoanStatus {
+  PENDING
+  RETURNED
+  OVERDUE
 }

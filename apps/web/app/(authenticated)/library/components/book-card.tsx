@@ -5,18 +5,11 @@ import { Badge } from "@workspace/ui/components/badge";
 import Link from "next/link";
 import { cn } from "@workspace/ui/lib/utils";
 import { motion } from "framer-motion";
-
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  cover: string;
-  status: string;
-}
+import type { Book } from "@prisma/client";
 
 interface BookCardProps {
   index: number;
-  book: Book;
+  book: any;
   viewMode: "grid" | "list";
 }
 
@@ -52,11 +45,10 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
           >
             <CardContent className="flex items-center p-4">
               <motion.div className="relative h-16 w-12 flex-shrink-0">
-                <Image
+                <img
                   src={book.cover}
                   alt={book.title}
-                  layout="fill"
-                  objectFit="cover"
+                  className="h-full w-full object-cover"
                 />
               </motion.div>
               <div className="ml-4 flex-grow">
@@ -74,7 +66,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  {book.author}
+                  {book.authors.map((author: any) => author.name).join(", ")}
                 </motion.p>
               </div>
               <motion.div
@@ -141,7 +133,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
                 {book.title}
               </h3>
               <p className="line-clamp-1 text-sm text-muted-foreground italic">
-                {book.author}
+                {book.authors.map((author: any) => author.name).join(", ")}
               </p>
             </motion.div>
           </CardContent>

@@ -11,7 +11,7 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 import { BookCard } from "./components/book-card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sheet, SheetContent } from "@workspace/ui/components/sheet";
 import {
   ToggleGroup,
@@ -19,6 +19,11 @@ import {
 } from "@workspace/ui/components/toggle-group";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
+import {
+  getLibrary,
+  type GetLibraryResponse,
+} from "@/actions/library/get-library";
 
 const books = [
   {
@@ -53,7 +58,20 @@ const books = [
 
 export default function LibraryPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [library, setLibrary] = useState<null | GetLibraryResponse>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  const { userId } = useAuth();
+
+  const handleGetLibrary = async () => {
+    const library = await getLibrary(userId as string);
+    console.log("library", library);
+    setLibrary(library);
+  };
+
+  useEffect(() => {
+    handleGetLibrary();
+  }, []);
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -119,15 +137,15 @@ export default function LibraryPage() {
               }
             >
               <AnimatePresence>
-                {books.map((book, index) => (
+                {library?.books?.map((item, index) => (
                   <motion.div
-                    key={book.id}
+                    key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <BookCard index={index} book={book} viewMode={viewMode} />
+                    <BookCard index={index} book={item.book} viewMode={viewMode} />
                   </motion.div>
                 ))}
               </AnimatePresence>
