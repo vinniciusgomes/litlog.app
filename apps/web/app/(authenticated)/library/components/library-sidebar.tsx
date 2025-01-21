@@ -1,35 +1,61 @@
 import { Button } from "@workspace/ui/components/button";
 import { Dialog, DialogTrigger } from "@workspace/ui/components/dialog";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
-import { BookMarked, ChevronDown, Download, List, Plus } from "lucide-react";
+import {
+  BookMarked,
+  BookX,
+  Download,
+  Glasses,
+  Library,
+  Pin,
+  Plus,
+} from "lucide-react";
 import { CreateShelfDialog } from "./create-shelf";
 
-const shelves = [
-  { name: "All books", icon: List, count: 2 },
-  { name: "Want to read", icon: BookMarked, count: 0 },
-  { name: "Currently reading", icon: BookMarked, count: 1 },
-  { name: "Did not finish", icon: ChevronDown, count: 0 },
-  { name: "Finished", icon: BookMarked, count: 1 },
-];
+interface LibrarySidebarProps {
+  libraryInfo: {
+    allBooksLength: number;
+    wantToReadLength: number;
+    currentlyReadingLength: number;
+    didNotFinishLength: number;
+    finishedLength: number;
+  };
+}
 
-export function LibrarySidebar() {
+export function LibrarySidebar({ libraryInfo }: LibrarySidebarProps) {
+  const menuList = [
+    { name: "All books", icon: Library, count: libraryInfo.allBooksLength },
+    { name: "Want to read", icon: Pin, count: libraryInfo.wantToReadLength },
+    {
+      name: "Currently reading",
+      icon: Glasses,
+      count: libraryInfo.currentlyReadingLength,
+    },
+    {
+      name: "Did not finish",
+      icon: BookX,
+      count: libraryInfo.didNotFinishLength,
+    },
+    { name: "Finished", icon: BookMarked, count: libraryInfo.finishedLength },
+  ];
+
   return (
     <Dialog>
       <div className="h-full w-64 border-r">
         <ScrollArea className="h-full py-4">
           <div className="space-y-4 px-4">
             <div className="space-y-1">
-              {shelves.map((shelf) => (
+              {menuList.map((item) => (
                 <Button
-                  key={shelf.name}
+                  key={item.name}
                   variant="ghost"
                   className="w-full justify-between"
                 >
                   <div className="flex items-center gap-2">
-                    <shelf.icon className="h-4 w-4" />
-                    <span>{shelf.name}</span>
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.name}</span>
                   </div>
-                  <span className="text-muted-foreground">{shelf.count}</span>
+                  <span className="text-muted-foreground">{item.count}</span>
                 </Button>
               ))}
             </div>

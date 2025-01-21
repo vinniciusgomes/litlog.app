@@ -1,60 +1,29 @@
 "use client";
 
-import { Grid, List, Search } from "lucide-react";
-import { LibrarySidebar } from "./components/library-sidebar";
+import {
+  getLibrary,
+  type GetLibraryResponse,
+} from "@/actions/library/get-library";
+import { useAuth } from "@clerk/nextjs";
+import { Button } from "@workspace/ui/components/button";
+import { Input } from "@workspace/ui/components/input";
+import { Sheet, SheetContent } from "@workspace/ui/components/sheet";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@workspace/ui/components/tabs";
-import { Input } from "@workspace/ui/components/input";
-import { Button } from "@workspace/ui/components/button";
-import { BookCard } from "./components/book-card";
-import { useEffect, useState } from "react";
-import { Sheet, SheetContent } from "@workspace/ui/components/sheet";
 import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@workspace/ui/components/toggle-group";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Grid, List, Search } from "lucide-react";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
-import {
-  getLibrary,
-  type GetLibraryResponse,
-} from "@/actions/library/get-library";
-
-const books = [
-  {
-    id: 1,
-    title: "O peso da glória",
-    author: "C. S. Lewis",
-    cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
-    status: "finished",
-  },
-  {
-    id: 2,
-    title: "O peso da glória",
-    author: "C. S. Lewis",
-    cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
-    status: "finished",
-  },
-  {
-    id: 3,
-    title: "O peso da glória",
-    author: "C. S. Lewis",
-    cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
-    status: "finished",
-  },
-  {
-    id: 4,
-    title: "O peso da glória",
-    author: "C. S. Lewis",
-    cover: "https://m.media-amazon.com/images/I/91VlF54YAlL._SL1500_.jpg",
-    status: "finished",
-  },
-];
+import { useEffect, useState } from "react";
+import { BookCard } from "./components/book-card";
+import { LibrarySidebar } from "./components/library-sidebar";
 
 export default function LibraryPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -73,19 +42,29 @@ export default function LibraryPage() {
     handleGetLibrary();
   }, []);
 
+  console.log(library);
+
   return (
     <div className="flex flex-1 overflow-hidden">
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
-        <LibrarySidebar />
+        <LibrarySidebar
+          libraryInfo={{
+            allBooksLength: library?.books.length || 0,
+            currentlyReadingLength: library?.books.filter((book) => book.status === "READING").length || 0,
+            didNotFinishLength: library?.books.filter((book) => book.status === "DID_NOT_FINISH").length || 0,
+            finishedLength: library?.books.filter((book) => book.status === "FINISHED").length || 0,
+            wantToReadLength: library?.books.filter((book) => book.status === "WANT_TO_READ").length || 0,
+          }}
+        />
       </div>
 
       {/* Mobile Sidebar */}
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+      {/* <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="left" className="w-64 p-0">
           <LibrarySidebar />
         </SheetContent>
-      </Sheet>
+      </Sheet> */}
 
       <motion.main
         initial={{ opacity: 0 }}
@@ -114,7 +93,7 @@ export default function LibraryPage() {
             </div>
           </div>
           <TabsContent value="books" className="space-y-4">
-            <div className="flex items-center justify-end">
+            {/* <div className="flex items-center justify-end">
               <ToggleGroup
                 type="single"
                 value={viewMode}
@@ -127,7 +106,7 @@ export default function LibraryPage() {
                   <List className="h-4 w-4" />
                 </ToggleGroupItem>
               </ToggleGroup>
-            </div>
+            </div> */}
             <motion.div
               layout
               className={
@@ -145,7 +124,12 @@ export default function LibraryPage() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <BookCard index={index} book={item.book} viewMode={viewMode} />
+                    <BookCard
+                      index={index}
+                      book={item.book}
+                      status={item.status}
+                      viewMode={viewMode}
+                    />
                   </motion.div>
                 ))}
               </AnimatePresence>

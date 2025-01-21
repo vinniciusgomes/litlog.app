@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import Image from "next/image";
 import { Share, Star, Highlighter, ChevronDown } from "lucide-react";
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
 import { Separator } from "@workspace/ui/components/separator";
+import { getBookBySlug } from "@/actions/book/get-book";
 
 const book = {
   id: 1,
@@ -31,7 +32,18 @@ const book = {
   },
 };
 
-export default function BookPage() {
+export default async function BookPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { slug } = await params;
+  const book = await getBookBySlug(slug);
+
+  if (!book) {
+    return <span>Not found</span>;
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 px-4 py-6 md:py-16 md:px-6">
@@ -52,11 +64,11 @@ export default function BookPage() {
             <div className="space-y-6 md:space-y-8">
               <div className="space-y-4 md:space-y-6">
                 <div className="flex flex-wrap gap-2">
-                  {book.tags.map((tag) => (
+                  {/* {book.tags.map((tag) => (
                     <Badge key={tag} variant="secondary">
                       {tag}
                     </Badge>
-                  ))}
+                  ))} */}
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold md:text-3xl heading mb-2">
@@ -67,9 +79,11 @@ export default function BookPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <span>{book.author}</span>
+                  <span>
+                    {book.authors?.map((author) => author.name).join(", ")}
+                  </span>
                   <span>—</span>
-                  <span>{book.year}</span>
+                  <span>{book.publishedDate.getFullYear()}</span>
                 </div>
                 <p className="text-muted-foreground text-sm md:text-base">
                   {book.description}
@@ -133,7 +147,7 @@ export default function BookPage() {
               <Separator />
 
               {/* Stats */}
-              <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-5">
+              {/* <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-5">
                 <div className="text-center">
                   <div className="text-xl font-thin heading italic mb-1">
                     {book.stats.reviews}
@@ -170,7 +184,7 @@ export default function BookPage() {
                     Want to read
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <Separator />
 

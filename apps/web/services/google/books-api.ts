@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import type { GoogleBookItem, GoogleBooksResponse } from "./types";
+import axios, {AxiosResponse} from "axios";
+import type {GoogleBookItem, GoogleBooksResponse} from "./types";
 
 const GOOGLE_BOOKS_API_URL = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_URL;
 
@@ -18,7 +18,7 @@ export const fetchBooks = async (query: string): Promise<GoogleBookItem[]> => {
 
   try {
     const response: AxiosResponse<GoogleBooksResponse> = await axios.get(
-      `${GOOGLE_BOOKS_API_URL}${encodeURIComponent(query)}`
+        `${GOOGLE_BOOKS_API_URL}${encodeURIComponent(query)}`
     );
 
     const items = response.data.items;
@@ -43,20 +43,20 @@ export const fetchBooks = async (query: string): Promise<GoogleBookItem[]> => {
       infoLink: item.volumeInfo.infoLink,
       buyLink: item.saleInfo?.buyLink,
       price: item.saleInfo?.listPrice
-        ? {
+          ? {
             list: item.saleInfo.listPrice.amount,
             retail:
-              item.saleInfo.retailPrice?.amount ||
-              item.saleInfo.listPrice.amount,
+                item.saleInfo.retailPrice?.amount ||
+                item.saleInfo.listPrice.amount,
             currency: item.saleInfo.listPrice.currencyCode,
           }
-        : undefined,
+          : undefined,
     }));
 
     return books;
   } catch (error) {
     throw new Error(
-      `Failed to fetch books: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to fetch books: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 };

@@ -1,19 +1,22 @@
-import Image from "next/image";
-import { Check } from "lucide-react";
-import { Card, CardContent } from "@workspace/ui/components/card";
+import type { Book } from "@/models/book";
+import { bookStatusToBadge } from "@/utils/book-status";
+import type { Author, BookStatus } from "@prisma/client";
 import { Badge } from "@workspace/ui/components/badge";
-import Link from "next/link";
+import { Card, CardContent } from "@workspace/ui/components/card";
 import { cn } from "@workspace/ui/lib/utils";
 import { motion } from "framer-motion";
-import type { Book } from "@prisma/client";
+import { Check } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface BookCardProps {
   index: number;
-  book: any;
+  book: Book;
   viewMode: "grid" | "list";
+  status: BookStatus;
 }
 
-export function BookCard({ index, book, viewMode }: BookCardProps) {
+export function BookCard({ index, book, viewMode, status }: BookCardProps) {
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -29,7 +32,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
   // List View
   if (viewMode === "list") {
     return (
-      <Link href={`/book/${book.id}`}>
+      <Link href={`/book/${book.slug}`}>
         <motion.div
           variants={cardVariants}
           initial="hidden"
@@ -66,7 +69,9 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  {book.authors.map((author: any) => author.name).join(", ")}
+                  {book.authors
+                    ?.map((author: Author) => author.name)
+                    .join(", ")}
                 </motion.p>
               </div>
               <motion.div
@@ -74,12 +79,12 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
               >
-                <Badge
+                {/* <Badge
                   variant={book.status === "reading" ? "secondary" : "default"}
                 >
                   <Check className="mr-1 h-3 w-3" />
                   {book.status === "reading" ? "Reading" : "Finished"}
-                </Badge>
+                </Badge> */}
               </motion.div>
             </CardContent>
           </Card>
@@ -90,7 +95,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
 
   // Grid View
   return (
-    <Link href={`/book/${book.id}`}>
+    <Link href={`/book/${book.slug}`}>
       <motion.div
         variants={cardVariants}
         initial="hidden"
@@ -115,12 +120,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Badge
-                  variant={book.status === "reading" ? "secondary" : "default"}
-                >
-                  <Check className="mr-1 h-3 w-3" />
-                  {book.status === "reading" ? "Reading" : "Finished"}
-                </Badge>
+                {bookStatusToBadge(status)}
               </motion.div>
             </motion.div>
             <motion.div
@@ -133,7 +133,7 @@ export function BookCard({ index, book, viewMode }: BookCardProps) {
                 {book.title}
               </h3>
               <p className="line-clamp-1 text-sm text-muted-foreground italic">
-                {book.authors.map((author: any) => author.name).join(", ")}
+                {book.authors?.map((author: Author) => author.name).join(", ")}
               </p>
             </motion.div>
           </CardContent>

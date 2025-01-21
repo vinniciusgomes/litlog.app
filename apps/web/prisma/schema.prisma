@@ -45,6 +45,7 @@ model Book {
   @@index([title])
   @@index([publishedDate])
   @@index([language])
+  @@index([slug])
   @@map("book")
 }
 
