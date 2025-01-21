@@ -1,35 +1,19 @@
 "use client";
 
-import {useRef, useState} from "react";
-import {motion} from "framer-motion";
-import {Button} from "@workspace/ui/components/button";
-import {Input} from "@workspace/ui/components/input";
-import {Label} from "@workspace/ui/components/label";
-import {Textarea} from "@workspace/ui/components/textarea";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@workspace/ui/components/select";
-import {Checkbox} from "@workspace/ui/components/checkbox";
-import {Calendar} from "@workspace/ui/components/calendar";
-import {Popover, PopoverContent, PopoverTrigger,} from "@workspace/ui/components/popover";
-import {format} from "date-fns";
-import {CalendarIcon, Upload} from "lucide-react";
-import {cn} from "@workspace/ui/lib/utils";
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@workspace/ui/components/button";
+import { Input } from "@workspace/ui/components/input";
+import { Label } from "@workspace/ui/components/label";
+import { Textarea } from "@workspace/ui/components/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@workspace/ui/components/select";
+import { Checkbox } from "@workspace/ui/components/checkbox";
+import { Calendar } from "@workspace/ui/components/calendar";
+import { Popover, PopoverContent, PopoverTrigger, } from "@workspace/ui/components/popover";
+import { format } from "date-fns";
+import { CalendarIcon, Upload } from "lucide-react";
+import { cn } from "@workspace/ui/lib/utils";
 import Link from "next/link";
-
-interface BookFormData {
-  title: string;
-  subtitle?: string;
-  description?: string;
-  authors: string;
-  language: string;
-  pageCount?: number;
-  isbn10?: string;
-  isbn13?: string;
-  publishedDate?: Date;
-  publisher?: string;
-  format?: string;
-  isAdultContent: boolean;
-  coverImage?: File;
-}
 
 export default function AddBookPage() {
   const [date, setDate] = useState<Date>();

@@ -1,11 +1,11 @@
 "use client"
 
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import {Card, CardContent} from "@workspace/ui/components/card"
-import {GoogleBookItem} from "@/services/google/types";
-import {Button} from "@workspace/ui/components/button";
+import { Card, CardContent } from "@workspace/ui/components/card"
+import { GoogleBookItem } from "@/services/google/types";
+import { Button } from "@workspace/ui/components/button";
 
 interface SearchResultsProps {
   results: GoogleBookItem[]
