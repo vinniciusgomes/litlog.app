@@ -1,19 +1,21 @@
 "use client";
 
-import Link from "next/link";
-import { Bell, MessageSquare, MoreVertical, Search, User } from "lucide-react";
-import { Input } from "@workspace/ui/components/input";
-import { Button } from "@workspace/ui/components/button";
-import { STRINGS } from "@/constants/strings";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar";
+import { Button } from "@workspace/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
+import { Input } from "@workspace/ui/components/input";
+import { Bell, MessageSquare, MoreVertical, Search, User } from "lucide-react";
+import Link from "next/link";
+
+import { STRINGS } from "@/constants/strings";
+
 import { UserMenu } from "./user-menu";
 
 interface LibraryNavProps {

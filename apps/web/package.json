@@ -33,6 +33,7 @@
     "@workspace/eslint-config": "workspace:^",
     "@workspace/typescript-config": "workspace:*",
     "postcss": "^8",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "6.2.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

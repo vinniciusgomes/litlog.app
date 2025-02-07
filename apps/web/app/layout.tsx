@@ -1,6 +1,7 @@
-import { Libre_Baskerville, Inter } from "next/font/google";
-
 import "@workspace/ui/globals.css";
+
+import { Inter, Libre_Baskerville } from "next/font/google";
+
 import { Providers } from "@/components/providers";
 
 const libreBaskerville = Libre_Baskerville({

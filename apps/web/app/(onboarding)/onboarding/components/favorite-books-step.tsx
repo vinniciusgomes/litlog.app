@@ -1,10 +1,11 @@
-import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@workspace/ui/components/button";
-import { mockBooks } from "../utils/mock";
-import { Book } from "../types/onboarding";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { Check } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+
+import { Book } from "../types/onboarding";
+import { mockBooks } from "../utils/mock";
 
 interface FavoriteBooksStepProps {
   onNext: (favoriteBooks: string[]) => void;

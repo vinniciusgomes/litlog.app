@@ -5,11 +5,11 @@ import {
   DropdownMenuSeparator,
 } from "@workspace/ui/components/dropdown-menu";
 import {
-  UserCircle,
-  Target,
-  Settings,
-  MessageCircle,
   LogOut,
+  MessageCircle,
+  Settings,
+  Target,
+  UserCircle,
 } from "lucide-react";
 import Link from "next/link";
 

@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
-import { genres } from "../utils/mock";
-import { Genre } from "../types/onboarding";
 import { Card, CardContent } from "@workspace/ui/components/card";
+import { useState } from "react";
+
+import { Genre } from "../types/onboarding";
+import { genres } from "../utils/mock";
 
 interface PreferencesStepProps {
   onNext: (preferences: Genre[]) => void;

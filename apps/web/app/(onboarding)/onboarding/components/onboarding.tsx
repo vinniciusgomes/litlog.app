@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { PreferencesStep } from "./preferences-step";
-import { FavoriteBooksStep } from "./favorite-books-step";
-import { TopBooksStep } from "./top-books-step";
-import { OnboardingData, Genre } from "../types/onboarding";
 import { Progress } from "@workspace/ui/components/progress";
+import { AnimatePresence,motion } from "framer-motion";
+import { useState } from "react";
+
+import { Genre,OnboardingData } from "../types/onboarding";
+import { FavoriteBooksStep } from "./favorite-books-step";
+import { PreferencesStep } from "./preferences-step";
+import { TopBooksStep } from "./top-books-step";
 
 const steps = ["preferences", "favoriteBooks", "topBooks"] as const;
 type Step = (typeof steps)[number];

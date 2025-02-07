@@ -1,10 +1,10 @@
 "use client";
 
 import { enUS } from "@clerk/localizations";
-import * as React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@workspace/ui/components/sonner";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import * as React from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

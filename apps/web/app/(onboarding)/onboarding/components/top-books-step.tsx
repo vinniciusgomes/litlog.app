@@ -1,8 +1,8 @@
+import { Button } from "@workspace/ui/components/button";
+import { Card, CardContent } from "@workspace/ui/components/card";
 import Image from "next/image";
 
 import { topBooks } from "../utils/mock";
-import { Card, CardContent } from "@workspace/ui/components/card";
-import { Button } from "@workspace/ui/components/button";
 
 interface TopBooksStepProps {
   onFinish: () => void;
