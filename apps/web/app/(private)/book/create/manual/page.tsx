@@ -1,15 +1,11 @@
 "use client";
 
+import { languages } from "@/utils/languages";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@workspace/ui/components/button";
-import { Calendar } from "@workspace/ui/components/calendar";
 import { Checkbox } from "@workspace/ui/components/checkbox";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@workspace/ui/components/popover";
 import {
   Select,
   SelectContent,
@@ -18,22 +14,62 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select";
 import { Textarea } from "@workspace/ui/components/textarea";
-import { cn } from "@workspace/ui/lib/utils";
-import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { CalendarIcon, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const bookSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  authors: z.string().min(1, "At least one author is required"),
+  language: z.string().min(2, "Language is required"),
+  pageCount: z.number().min(1, "Page count must be at least 1").optional(),
+  isbn10: z.string().optional(),
+  isbn13: z.string().optional(),
+  publishedDate: z.date().optional(),
+  publisher: z.string().optional(),
+  format: z.enum(["hardcover", "paperback", "ebook", "audiobook"]).optional(),
+  adultContent: z.boolean().optional(),
+  coverImage: z.any().optional(),
+});
 
 export default function AddBookPage() {
-  const [date, setDate] = useState<Date>();
   const [coverPreview, setCoverPreview] = useState<string>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(bookSchema),
+    defaultValues: {
+      title: "",
+      subtitle: "",
+      description: "",
+      authors: "",
+      language: "en",
+      pageCount: undefined,
+      isbn10: "",
+      isbn13: "",
+      publishedDate: undefined,
+      publisher: "",
+      format: undefined,
+      adultContent: false,
+      coverImage: "",
+    },
+  });
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setCoverPreview(URL.createObjectURL(file));
+      setValue("coverImage", URL.createObjectURL(file));
     }
   };
 
@@ -41,9 +77,8 @@ export default function AddBookPage() {
     fileInputRef.current?.click();
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Handle form submission
+  const onSubmit = async (data: any) => {
+    console.log("Form submitted:", data);
   };
 
   return (
@@ -69,16 +104,19 @@ export default function AddBookPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
-              <Input id="title" name="title" required />
+              <Input id="title" {...register("title")} />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="subtitle">Subtitle (optional)</Label>
-              <Input id="subtitle" name="subtitle" />
+              <Input id="subtitle" {...register("subtitle")} />
             </div>
 
             <div className="space-y-2">
@@ -101,11 +139,11 @@ export default function AddBookPage() {
                   )}
                 </div>
                 <input
+                  aria-label="Upload cover image"
                   id="coverImage"
-                  title="Upload cover image"
-                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  ref={fileInputRef}
                   onChange={handleImageUpload}
                   className="hidden"
                 />
@@ -114,101 +152,39 @@ export default function AddBookPage() {
 
             <div className="space-y-2">
               <Label htmlFor="description">Description (optional)</Label>
-              <Textarea id="description" name="description" rows={3} />
+              <Textarea
+                id="description"
+                {...register("description")}
+                rows={3}
+              />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="authors">
-                Authors (separated if more than one)
-              </Label>
-              <Input id="authors" name="authors" required />
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="language">Language</Label>
-                <Select name="language">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="es">Spanish</SelectItem>
-                    <SelectItem value="fr">French</SelectItem>
-                    <SelectItem value="de">German</SelectItem>
-                    <SelectItem value="pt">Portuguese</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pageCount">Page Count (optional)</Label>
-                <Input id="pageCount" name="pageCount" type="number" min="1" />
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="isbn10">ISBN-10 (optional)</Label>
-                <Input id="isbn10" name="isbn10" />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="isbn13">ISBN-13 (optional)</Label>
-                <Input id="isbn13" name="isbn13" />
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label>Date of publication (optional)</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-normal h-10",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : "Pick a date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="publisher">Publisher (optional)</Label>
-                <Input id="publisher" name="publisher" />
-              </div>
+              <Label htmlFor="authors">Authors (separated by commas)</Label>
+              <Input id="authors" {...register("authors")} />
+              {errors.authors && (
+                <p className="text-red-500 text-sm">{errors.authors.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="format">Format (optional)</Label>
-              <Select name="format">
+              <Label htmlFor="language">Language</Label>
+              <Select {...register("language")} defaultValue="en">
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose Format" />
+                  <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="hardcover">Hardcover</SelectItem>
-                  <SelectItem value="paperback">Paperback</SelectItem>
-                  <SelectItem value="ebook">E-book</SelectItem>
-                  <SelectItem value="audiobook">Audiobook</SelectItem>
+                  {languages.map((language) => (
+                    <SelectItem key={language.code} value={language.code}>
+                      {language.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
 
             <div className="flex items-center space-x-2">
-              <Checkbox id="adultContent" />
+              <Checkbox id="adultContent" {...register("adultContent")} />
               <Label htmlFor="adultContent">Adult content (optional)</Label>
             </div>
           </div>
