@@ -1,0 +1,1 @@
+export const BOOKS_IMAGES_BUCKET_FOLDER = "books-images"

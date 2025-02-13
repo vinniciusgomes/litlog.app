@@ -1,6 +1,5 @@
 "use client";
 
-import { languages } from "@/utils/languages";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@workspace/ui/components/button";
 import { Checkbox } from "@workspace/ui/components/checkbox";
@@ -21,6 +20,9 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { uploadImageFile } from "@/services/s3/upload-file";
+import { languages } from "@/utils/languages";
+
 const bookSchema = z.object({
   title: z.string().min(1, "Title is required"),
   subtitle: z.string().optional(),
@@ -37,8 +39,11 @@ const bookSchema = z.object({
   coverImage: z.any().optional(),
 });
 
+interface CreateBookFormData extends z.infer<typeof bookSchema> {}
+
 export default function AddBookPage() {
   const [coverPreview, setCoverPreview] = useState<string>();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -65,11 +70,11 @@ export default function AddBookPage() {
     },
   });
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setCoverPreview(URL.createObjectURL(file));
-      setValue("coverImage", URL.createObjectURL(file));
+      setSelectedFile(file);
     }
   };
 
@@ -77,7 +82,22 @@ export default function AddBookPage() {
     fileInputRef.current?.click();
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CreateBookFormData) => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      
+      const response = await uploadImageFile({
+        contentType: selectedFile.type,
+        filePath: "/books/covers",
+        formData
+      });
+
+      if (response.status === "success") {
+        data.coverImage = response.message;
+      }
+    }
+    
     console.log("Form submitted:", data);
   };
 
@@ -118,7 +138,6 @@ export default function AddBookPage() {
               <Label htmlFor="subtitle">Subtitle (optional)</Label>
               <Input id="subtitle" {...register("subtitle")} />
             </div>
-
             <div className="space-y-2">
               <Label>Cover Image (optional)</Label>
               <div className="flex items-center gap-4">
@@ -144,11 +163,12 @@ export default function AddBookPage() {
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}
-                  onChange={handleImageUpload}
+                  onChange={handleImageSelection}
                   className="hidden"
                 />
               </div>
             </div>
+
 
             <div className="space-y-2">
               <Label htmlFor="description">Description (optional)</Label>
