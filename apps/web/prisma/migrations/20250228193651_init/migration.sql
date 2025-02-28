@@ -1,29 +1,47 @@
-/*
-  Warnings:
-
-  - You are about to drop the `_BookAuthors` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- CreateEnum
 CREATE TYPE "BookStatus" AS ENUM ('WANT_TO_READ', 'READING', 'DID_NOT_FINISH', 'FINISHED');
 
 -- CreateEnum
 CREATE TYPE "LoanStatus" AS ENUM ('PENDING', 'RETURNED', 'OVERDUE');
 
--- DropForeignKey
-ALTER TABLE "_BookAuthors" DROP CONSTRAINT "_BookAuthors_A_fkey";
+-- CreateTable
+CREATE TABLE "shelf" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL DEFAULT '',
+    "description" TEXT,
+    "user_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "_BookAuthors" DROP CONSTRAINT "_BookAuthors_B_fkey";
+    CONSTRAINT "shelf_pkey" PRIMARY KEY ("id")
+);
 
--- DropTable
-DROP TABLE "_BookAuthors";
+-- CreateTable
+CREATE TABLE "book" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "subtitle" TEXT,
+    "description" TEXT NOT NULL,
+    "isbn10" TEXT NOT NULL,
+    "isbn13" TEXT NOT NULL,
+    "language" TEXT NOT NULL,
+    "pageCount" INTEGER NOT NULL,
+    "publishedDate" TIMESTAMP(3) NOT NULL,
+    "publisher" TEXT NOT NULL,
+    "physicalFormat" TEXT NOT NULL,
+    "cover" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "book_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "shelf_book" (
-    "id" STRING NOT NULL,
-    "shelf_id" STRING NOT NULL,
-    "book_id" STRING NOT NULL,
+    "id" TEXT NOT NULL,
+    "shelf_id" TEXT NOT NULL,
+    "book_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -31,9 +49,20 @@ CREATE TABLE "shelf_book" (
 );
 
 -- CreateTable
+CREATE TABLE "author" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "author_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "library" (
-    "id" STRING NOT NULL,
-    "user_id" STRING NOT NULL,
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -42,9 +71,9 @@ CREATE TABLE "library" (
 
 -- CreateTable
 CREATE TABLE "library_book" (
-    "id" STRING NOT NULL,
-    "library_id" STRING NOT NULL,
-    "book_id" STRING NOT NULL,
+    "id" TEXT NOT NULL,
+    "library_id" TEXT NOT NULL,
+    "book_id" TEXT NOT NULL,
     "status" "BookStatus" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -54,28 +83,28 @@ CREATE TABLE "library_book" (
 
 -- CreateTable
 CREATE TABLE "loan" (
-    "id" STRING NOT NULL,
-    "library_book_id" STRING NOT NULL,
-    "borrower" STRING NOT NULL,
+    "id" TEXT NOT NULL,
+    "library_book_id" TEXT NOT NULL,
+    "borrower" TEXT NOT NULL,
     "loan_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "due_date" TIMESTAMP(3) NOT NULL,
     "return_date" TIMESTAMP(3),
     "status" "LoanStatus" NOT NULL DEFAULT 'PENDING',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "bookId" STRING,
+    "bookId" TEXT,
 
     CONSTRAINT "loan_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "goal" (
-    "id" STRING NOT NULL,
-    "user_id" STRING NOT NULL,
-    "name" STRING NOT NULL,
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
-    "book_count" INT4 NOT NULL,
+    "book_count" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -84,9 +113,9 @@ CREATE TABLE "goal" (
 
 -- CreateTable
 CREATE TABLE "goal_book" (
-    "id" STRING NOT NULL,
-    "goal_id" STRING NOT NULL,
-    "book_id" STRING NOT NULL,
+    "id" TEXT NOT NULL,
+    "goal_id" TEXT NOT NULL,
+    "book_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -95,12 +124,44 @@ CREATE TABLE "goal_book" (
 
 -- CreateTable
 CREATE TABLE "_book_authors" (
-    "A" STRING NOT NULL,
-    "B" STRING NOT NULL
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_book_authors_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
+CREATE INDEX "shelf_user_id_idx" ON "shelf"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "book_slug_key" ON "book"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "book_isbn10_key" ON "book"("isbn10");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "book_isbn13_key" ON "book"("isbn13");
+
+-- CreateIndex
+CREATE INDEX "book_title_idx" ON "book"("title");
+
+-- CreateIndex
+CREATE INDEX "book_publishedDate_idx" ON "book"("publishedDate");
+
+-- CreateIndex
+CREATE INDEX "book_language_idx" ON "book"("language");
+
+-- CreateIndex
+CREATE INDEX "book_slug_idx" ON "book"("slug");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "shelf_book_shelf_id_book_id_key" ON "shelf_book"("shelf_id", "book_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "author_slug_key" ON "author"("slug");
+
+-- CreateIndex
+CREATE INDEX "author_name_idx" ON "author"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "library_user_id_key" ON "library"("user_id");
@@ -119,9 +180,6 @@ CREATE INDEX "goal_user_id_idx" ON "goal"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "goal_book_goal_id_book_id_key" ON "goal_book"("goal_id", "book_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_book_authors_AB_unique" ON "_book_authors"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_book_authors_B_index" ON "_book_authors"("B");
