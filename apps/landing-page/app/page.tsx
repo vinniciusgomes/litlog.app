@@ -1,9 +1,21 @@
-import { Hero } from "@/components/hero";
+import FAQ from "@/components/faq";
+import Features from "@/components/features";
+import Footer from "@/components/footer";
+import Hero from "@/components/hero";
+import { Navbar } from "@/components/navbar";
+import Pricing from "@/components/pricing";
+import Testimonial from "@/components/testimonial";
 
-export default function Page() {
+export default function Home() {
   return (
-    <main className="pt-3 sm:pt-5 md:pt-8 lg:pt-10 xl:pt-15 p-2 sm:px-6 lg:px-8 xl:px-14">
+    <>
+      <Navbar />
       <Hero />
-    </main>
+      <Features />
+      <FAQ />
+      <Testimonial />
+      <Pricing />
+      <Footer />
+    </>
   );
 }
